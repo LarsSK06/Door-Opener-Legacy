@@ -22,13 +22,23 @@
 
 
 
-// Listeners
+// Events
 
     app.all("*", (request, response) => { // Fallback
+        if(fs.existsSync(`./frontend${request.url}`)){
+            response.status(200).sendFile(`${__dirname}/frontend${request.url}`);
+            return;
+        }
         response.status(404).send({
             code: 404,
             message: "Unknown request"
         });
+        console.log(`Unknown request:`
+            + `\n\tip:\t\t${request.ip}`
+            + `\n\thost:\t\t${request.hostname}`
+            + `\n\turl:\t\t${request.url}`
+            + `\n\tmethod:\t\t${request.method}`
+        );
     });
 
     const port = 4000;
