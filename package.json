@@ -19,5 +19,6 @@
     "johnny-five": "^2.1.0",
     "nodemon": "^3.0.1"
   },
+  "devDependencies": {},
   "description": ""
 }
