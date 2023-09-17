@@ -1,4 +1,4 @@
-const ip = "127.0.0.1:4000";
+const ip = "127.0.0.1:4000"; // Must be changed to server computer static IP
 
 window.addEventListener("load", async () => {
     {
@@ -39,10 +39,16 @@ window.addEventListener("load", async () => {
             }
         });
     }
-    function log(message){
-        const logField = document.querySelector("#container").querySelector("#log");
-        logField.innerHTML = message;
-        logField.style.opacity = 1;
-        setTimeout(() => logField.style.opacity = 0, 2500);
+    {
+        let onCooldown = false;
+        function log(message){
+            if(onCooldown) return;
+            onCooldown = true;
+            const logField = document.querySelector("#container").querySelector("#log");
+            logField.innerHTML = message;
+            logField.style.opacity = 1;
+            setTimeout(() => logField.style.opacity = 0, 2500);
+            setTimeout(() => onCooldown = false, 3000);
+        }
     }
 });
