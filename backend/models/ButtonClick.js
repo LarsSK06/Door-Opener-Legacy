@@ -16,7 +16,6 @@ module.exports = class ButtonClick extends Model {
             tableName: 'ButtonClick',
             updatedAt: false,
             createdAt: true, // Logs when created and by who
-            raw: true,
             sequelize
         })
     }
