@@ -12,10 +12,14 @@ class ArduinoControl extends Board {
         console.log('Arduino ready for use') 
     }
     openDoor() {
+        if (this.servo === null) 
+            return 'Servo is not ready yet'
+        
         this.servo.max()
         setTimeout(() => {
             this.servo.min()
         }, 1000)
+        return 'door function completed'
     }
 }
 
