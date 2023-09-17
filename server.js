@@ -40,7 +40,7 @@
             });
             return;
         }
-        if(!users[request.body["username"].toLowerCase()]){
+        if(!users[request.body["username"]]){
             response.status(404).send({
                 code: 404,
                 message: "Username or password incorrect",
@@ -48,7 +48,7 @@
             });
             return;
         }
-        if(users[request.body["username"].toLowerCase()]["password"] != request.body["password"]){
+        if(users[request.body["username"]]["password"] != request.body["password"]){
             response.status(404).send({
                 code: 404,
                 message: "Username or password incorrect",
@@ -61,6 +61,7 @@
             message: "Successfully received signal",
             abbr: "srs"
         });
+        cmd.exec(`py main.py "${request.body["username"]}"`);
 
         // arduino her
     });
@@ -70,10 +71,10 @@
             response.status(200).sendFile(`${__dirname}/frontend${request.url}`);
             return;
         }
-        response.status(404).end(JSON.stringify({
+        response.status(404).send({
             code: 404,
             message: "Unknown request"
-        }));
+        });
         console.log(`\nUnknown request:`
             + `\n\tip:\t\t${request.ip}`
             + `\n\thost:\t\t${request.hostname}`
