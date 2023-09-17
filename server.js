@@ -61,6 +61,8 @@
             message: "Successfully received signal",
             abbr: "srs"
         });
+
+        // arduino her
     });
 
     app.all("*", (request, response) => { // Fallback
