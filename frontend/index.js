@@ -1,15 +1,15 @@
-const ip = "127.0.0.1:4000"; // Must be changed to server computer static IP
+const ip = '127.0.0.1:4000' // Must be changed to server computer static IP
 
-window.addEventListener("load", async () => {
+window.addEventListener('load', async () => {
     {
         const container = document.querySelector("#container");
         container.querySelector("#submit").addEventListener("click", async () => {
             const password = document.querySelector("#container").querySelector("#password").value;
             const response = await fetch(`http://${ip}/s`, {
-                method: "PUT",
+                method: 'PUT',
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "just-for-security-idfk"
+                    'Content-Type': 'application/json',
+                    Authorization: 'just-for-security-idfk'
                 },
                 body: JSON.stringify({
                     password: password
@@ -31,18 +31,18 @@ window.addEventListener("load", async () => {
                     log(response.status + ": Successfully received signal");
                     break;
             }
-        });
+        })
     }
     {
-        let onCooldown = false;
-        function log(message){
-            if(onCooldown) return;
-            onCooldown = true;
-            const logField = document.querySelector("#container").querySelector("#log");
-            logField.innerHTML = message;
-            logField.style.opacity = 1;
-            setTimeout(() => logField.style.opacity = 0, 2500);
-            setTimeout(() => onCooldown = false, 3000);
+        let onCooldown = false
+        function log(message) {
+            if (onCooldown) return
+            onCooldown = true
+            const logField = document.querySelector('#container').querySelector('#log')
+            logField.innerHTML = message
+            logField.style.opacity = 1
+            setTimeout(() => logField.style.opacity = 0, 2500)
+            setTimeout(() => onCooldown = false, 3000)
         }
     }
     function cutDecimals(num, dec){

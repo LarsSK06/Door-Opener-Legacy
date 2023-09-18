@@ -1,28 +1,28 @@
 // Package definitions
+const session = require('express-session')
+const express = require('express')
+const SequelizeStore = require('connect-session-sequelize')(session.Store)
 
-    const express = require("express");
-    const cors = require("cors");
-    const fs = require("fs");
-    const cmd = require("node:child_process");
-
-
+const cors = require('cors')
+const fs = require('fs')
+const DataBaseManager = require('./backend/src/db')
+const DBManager = new DataBaseManager
+const ArduinoControl = require("./backend/arduinoConnector")
+const arduino = new ArduinoControl
 
 // Express app config
 
-    const app = express();
-    app.disable("x-powered-by");
-    app.use(express.json());
-    app.use(cors());
+const app = express()
+app.disable('x-powered-by')
+app.use(express.json())
+app.use(cors())
 
-
-
-// Variables
-
-    let onCooldown = false;
-    const cooldown = 10;
-    let cooldownStartEpoch = 0;
-
-
+app.use(session({
+    secret: 'our-secret-key',
+    resave: false,
+    saveUninitialized: true,
+    store: DBManager.store()
+}))
 
 // Events
 
@@ -88,11 +88,3 @@
     const session = app.listen(port, "0.0.0.0", () => {
         console.log(`API active on port ${port}!`);
     });
-
-
-
-// Functions
-
-    function getEpoch(){
-        return new Date() / 1000;
-    }
