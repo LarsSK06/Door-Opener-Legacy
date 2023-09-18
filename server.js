@@ -5,11 +5,10 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store)
 
 const cors = require('cors')
 const fs = require('fs')
-const cmd = require('node:child_process')
-const users = require('./users.json')
 const DataBaseManager = require('./backend/src/db')
 const DBManager = new DataBaseManager
-
+const ArduinoControl = require("./backend/arduinoConnector")
+const arduino = new ArduinoControl
 
 // Express app config
 
@@ -30,50 +29,14 @@ app.use(session({
 
 
 app.put('/s', (request, response) => {
-    console.log('store: ', DBManager.sequelize.connections)
-    if (request.headers.authorization != 'just-for-security-idfk') {
-        response.status(401).send({
-            code: 401,
-            message: 'Invalid authorization header',
-            abbr: 'iah'
-        })
-        return
-    }
-    if (
-        !request.body
-            || !request.body['username']
-            || !request.body['password']
-    ) {
-        response.status(400).send({
-            code: 400,
-            message: 'Request body missing username or password',
-            abbr: 'buopm'
-        })
-        return
-    }
-    if (!users[request.body['username']]) {
-        response.status(404).send({
-            code: 404,
-            message: 'Username or password incorrect',
-            abbr: 'uopi'
-        })
-        return
-    }
-    if (users[request.body['username']]['password'] != request.body['password']) {
-        response.status(404).send({
-            code: 404,
-            message: 'Username or password incorrect',
-            abbr: 'uopi'
-        })
-        return
-    }
+
     response.status(200).send({
         code: 200,
         message: 'Successfully received signal',
         abbr: 'srs'
     })
-    cmd.exec(`py main.py "${request.body['username']}"`)
-
+    
+    arduino.openDoor()
     // arduino her
 })
 
