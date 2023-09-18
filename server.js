@@ -4,7 +4,6 @@
     const cors = require("cors");
     const fs = require("fs");
     const cmd = require("node:child_process");
-    const users = require("./users.json");
 
 
 
@@ -17,9 +16,26 @@
 
 
 
+// Variables
+
+    let onCooldown = false;
+    const cooldown = 10;
+    let cooldownStartEpoch = 0;
+
+
+
 // Events
 
     app.put("/s", (request, response) => {
+        if(onCooldown){
+            response.status(401).send({
+                code: 401,
+                message: "On cooldown",
+                abbr: "oc",
+                timeLeft: (cooldownStartEpoch + cooldown) - getEpoch()
+            });
+            return;
+        }
         if(request.headers.authorization != "just-for-security-idfk"){
             response.status(401).send({
                 code: 401,
@@ -30,29 +46,12 @@
         }
         if(
             !request.body
-            || !request.body["username"]
             || !request.body["password"]
         ){
             response.status(400).send({
                 code: 400,
-                message: "Request body missing username or password",
-                abbr: "buopm"
-            });
-            return;
-        }
-        if(!users[request.body["username"]]){
-            response.status(404).send({
-                code: 404,
-                message: "Username or password incorrect",
-                abbr: "uopi"
-            });
-            return;
-        }
-        if(users[request.body["username"]]["password"] != request.body["password"]){
-            response.status(404).send({
-                code: 404,
-                message: "Username or password incorrect",
-                abbr: "uopi"
+                message: "Request body missing password",
+                abbr: "rbmp"
             });
             return;
         }
@@ -61,7 +60,9 @@
             message: "Successfully received signal",
             abbr: "srs"
         });
-        cmd.exec(`py main.py "${request.body["username"]}"`);
+        cooldownStartEpoch = getEpoch();
+        onCooldown = true
+        setTimeout(() => onCooldown = false, cooldown * 1000);
 
         // arduino her
     });
@@ -87,3 +88,11 @@
     const session = app.listen(port, "0.0.0.0", () => {
         console.log(`API active on port ${port}!`);
     });
+
+
+
+// Functions
+
+    function getEpoch(){
+        return new Date() / 1000;
+    }
