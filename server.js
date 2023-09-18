@@ -60,9 +60,6 @@ app.use(session({
             message: "Successfully received signal",
             abbr: "srs"
         });
-        cooldownStartEpoch = getEpoch();
-        onCooldown = true
-        setTimeout(() => onCooldown = false, cooldown * 1000);
 
         // arduino her
     });
@@ -85,6 +82,6 @@ app.use(session({
     });
 
     const port = 4000;
-    const session = app.listen(port, "0.0.0.0", () => {
+    app.listen(port, "0.0.0.0", () => {
         console.log(`API active on port ${port}!`);
     });
