@@ -82,6 +82,6 @@ app.use(session({
     });
 
     const port = 4000;
-    app.listen(port, "0.0.0.0", () => {
+    const session = app.listen(port, "0.0.0.0", () => {
         console.log(`API active on port ${port}!`);
     });
