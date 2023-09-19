@@ -36,7 +36,7 @@ app.use(session({
             });
             return;
         }
-        if(request.headers.authorization != "just-for-security-idfk"){
+        if(request.headers.authorization != process.env.auth){
             response.status(401).send({
                 code: 401,
                 message: "Invalid authorization header",
